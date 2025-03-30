@@ -17,7 +17,7 @@
 
   --breakpoint-xs: 480px;
 
-  --background-image-hero-pattern: url("/hero-bg.png");
+  --background-image-hero-pattern: url("hero-bg.png");
 }
 
 @layer base {
@@ -50,7 +50,7 @@
 
 @layer components {
   .pattern {
-    @apply bg-hero-pattern w-screen h-screen bg-center bg-cover absolute z-0;
+    @apply bg-hero-pattern w-full h-screen bg-center bg-cover absolute z-0;
   }
 
   .wrapper {
@@ -158,5 +158,63 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Add these at the end of your @layer components section */
+@layer components {
+  /* Feedback Section */
+  .feedback {
+    @apply mt-20 text-center;
+  }
+
+  .feedback-form {
+    @apply max-w-2xl mx-auto mt-6 space-y-4;
+  }
+
+  .form-group {
+    @apply w-full;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    @apply w-full bg-light-100/5 px-4 py-3 rounded-lg text-gray-200 placeholder-light-200 outline-none border border-light-100/20 focus:border-light-100/50;
+  }
+
+  .form-group textarea {
+    @apply resize-none;
+  }
+
+  .submit-btn {
+    @apply bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF] text-primary px-6 py-2 rounded-lg font-medium hover:from-[#C0B0FF] hover:to-[#9A7AFF] transition-colors;
+  }
+
+  .feedback-status {
+    @apply mt-2 text-sm;
+  }
+
+  .feedback-status:where(:not(:empty)) {
+    @apply text-green-400;
+  }
+
+  .feedback-status:where(:contains("Failed")) {
+    @apply text-red-500;
+  }
+
+  /* Footer */
+  .footer {
+    @apply mt-20 py-8 text-center text-gray-100 bg-dark-100 relative;
+    border-top-left-radius: 50% 20px;
+    border-top-right-radius: 50% 20px;
+    overflow: hidden;
+  }
+
+  .footer::before {
+    content: "";
+    @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF];
+  }
+
+  .footer p {
+    @apply text-sm;
   }
 }

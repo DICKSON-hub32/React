@@ -4,6 +4,8 @@ import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
 import { updateSearchCount } from "./appwrite";
+import Feedback from "./sections/Feedback"; // Import Feedback
+import Footer from "./sections/Footer"; // Import Footer
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 
@@ -97,6 +99,9 @@ const App = () => {
             </ul>
           )}
         </section>
+        {/* Add Feedback and Footer */}
+        <Feedback />
+        <Footer />
       </div>
     </main>
   );

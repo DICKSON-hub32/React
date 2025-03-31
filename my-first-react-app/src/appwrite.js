@@ -1,8 +1,8 @@
 import { Client, Databases, ID, Query } from "appwrite";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
-const DATABASE_ID = import.meta.env.VITE__APPWRITE_DATABASE_ID;
-const COLLECTION_ID = import.meta.env.VITE__APPWRITE_COLLECTION_ID;
+const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -18,7 +18,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
     ]);
 
     // 2. If it does, update the count
-    if (result.documents.length) {
+    if (result.documents.length > 0) {
       const doc = result.documents[0];
       await database.updateDocument(DATABASE_ID, COLLECTION_ID, doc.$id, {
         count: doc.count + 1

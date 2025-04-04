@@ -3,7 +3,7 @@ import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
-import { updateSearchCount } from "./appwrite";
+import { getTrendingMovies, updateSearchCount } from "./appwrite";
 import Feedback from "./sections/Feedback"; // Import Feedback
 import Footer from "./sections/Footer"; // Import Footer
 
@@ -23,10 +23,11 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 900, [searchTerm]);
 
   const fetchMovies = async (query = "") => {
     setIsLoading(true);
@@ -64,9 +65,21 @@ const App = () => {
     }
   };
 
+  const loadTrendingMovies = async () => {
+    try {
+      const movies = await getTrendingMovies();
+      setTrendingMovies(movies);
+    } catch (error) {
+      console.error(`Error fetching trending movies: ${error}`);
+    }
+  };
   useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [debouncedSearchTerm, searchTerm]);
+    fetchMovies(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    loadTrendingMovies();
+  }, []);
 
   return (
     <main>
@@ -76,16 +89,41 @@ const App = () => {
         <header>
           <img src="./hero.png" alt="Hero Banner" />
           <h1>
-            Find <span className="text-gradient">Movies</span> You'll Enjoy
-            Without the Hassle
+            Your Perfect <span className="text-gradient">Movies</span>, Found
+            Fast
           </h1>
 
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           {/* <h1 className="text-white">{searchTerm}</h1> */}
         </header>
 
-        <section className="all-movies">
-          <h2 className="mt[-40px]">All Movies</h2>
+        {/* Trending Movies Section */}
+        {trendingMovies.length > 0 && (
+          <section>
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold">Trending Movies</h2>
+            </div>
+
+            <ul
+              className="flex overflow-x-auto gap-4 pb-4 
+    sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 
+    sm:overflow-x-hidden"
+            >
+              {trendingMovies.map((movie) => (
+                <li key={movie.$id} className="flex-shrink-0 w-36">
+                  <img
+                    src={movie.poster_url}
+                    alt={movie.title}
+                    className="w-36 h-48 object-cover rounded-lg"
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className="all-movies mt-8">
+          <h2>All Movies</h2>
 
           {isLoading ? (
             <Spinner />

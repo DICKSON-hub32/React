@@ -155,6 +155,7 @@
 @utility hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  overflow: hidden; /* Fallback for unsupported browsers */
 
   &::-webkit-scrollbar {
     display: none;

@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D6C7FF] to-[#AB8BFF]"></div>
       <img
         src="./src/assets/logo.png"
-        alt="MovieFinder Logo"
+        alt="Teckish Logo"
         className="mx-auto w-24 h-auto mb-4 rounded-lg shadow-lg shadow-[#D6C7FF]/20 border border-[#AB8BFF]/30"
       />
       <p className="text-sm">

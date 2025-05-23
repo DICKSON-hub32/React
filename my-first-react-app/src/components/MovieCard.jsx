@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { saveFavorite, removeFavorite, getUserFavorites, saveRating } from "../appwrite";
-
-const WATCHMODE_API_KEY = import.meta.env.VITE_WATCHMODE_API_KEY;
 
 const MovieCard = ({
   movie: { id, title, vote_average, poster_path, release_date, original_language }
 }) => {
-  const [watchUrl, setWatchUrl] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [rating, setRating] = useState(0);
   const [showRatingInput, setShowRatingInput] = useState(false);
@@ -25,67 +23,8 @@ const MovieCard = ({
     checkFavorite();
   }, [id]);
 
-  useEffect(() => {
-    const fetchStreamingLink = async () => {
-      const cacheKey = `watchmode_${encodeURIComponent(title)}`;
-      const cached = localStorage.getItem(cacheKey);
-      const now = Date.now();
-      const cacheDuration = 24 * 60 * 60 * 1000;
-
-      if (cached) {
-        const { url, timestamp } = JSON.parse(cached);
-        if (now - timestamp < cacheDuration) {
-          setWatchUrl(url);
-          return;
-        }
-      }
-
-      try {
-        const searchRes = await fetch(
-          `https://api.watchmode.com/v1/search/?apiKey=${WATCHMODE_API_KEY}&search_field=name&search_value=${encodeURIComponent(title)}`
-        );
-        if (searchRes.status === 429) {
-          console.error("Watchmode API rate limit exceeded (429)");
-          setWatchUrl(`https://www.netflix.com/search?q=${encodeURIComponent(title)}`);
-          return;
-        }
-        const searchData = await searchRes.json();
-        let url = `https://www.netflix.com/search?q=${encodeURIComponent(title)}`;
-
-        if (searchData.title_results?.length > 0) {
-          const movieId = searchData.title_results[0].id;
-          const sourcesRes = await fetch(
-            `https://api.watchmode.com/v1/title/${movieId}/sources/?apiKey=${WATCHMODE_API_KEY}`
-          );
-          if (sourcesRes.status === 429) {
-            console.error("Watchmode API rate limit exceeded (429)");
-            setWatchUrl(url);
-            return;
-          }
-          const sourcesData = await sourcesRes.json();
-          if (Array.isArray(sourcesData)) {
-            const firstLink = sourcesData.find((s) => s.web_url);
-            if (firstLink?.web_url) {
-              url = firstLink.web_url;
-            }
-          } else {
-            console.error("Watchmode sources is not an array:", sourcesData);
-          }
-        }
-
-        localStorage.setItem(cacheKey, JSON.stringify({ url, timestamp: now }));
-        setWatchUrl(url);
-      } catch (error) {
-        console.error("Error fetching Watchmode link:", error);
-        setWatchUrl(`https://www.netflix.com/search?q=${encodeURIComponent(title)}`);
-      }
-    };
-
-    fetchStreamingLink();
-  }, [title]);
-
   const handleFavorite = async () => {
-    setErrorMessage(""); // Clear previous errors
+    setErrorMessage("");
     try {
       if (isFavorite) {
         await removeFavorite(id);
@@ -119,7 +58,7 @@ const MovieCard = ({
 
   return (
     <div className="movie-card">
-      <a href={watchUrl} target="_blank" rel="noopener noreferrer" className="relative">
+      <Link to={`/movie/${id}`} className="relative">
         <img
           src={
             poster_path
@@ -150,9 +89,11 @@ const MovieCard = ({
             />
           </svg>
         </button>
-      </a>
+      </Link>
       <div className="mt-4">
-      <a href={watchUrl} target="_blank" rel="noopener noreferrer" className="relative"><h3>{title}</h3></a>
+        <Link to={`/movie/${id}`}>
+          <h3 className="hover:underline">{title}</h3>
+        </Link>
         <div className="content">
           <div className="rating">
             <img src="star.svg" alt="Star Icon" />

@@ -59,6 +59,7 @@ const App = () => {
 
       if (!response.ok) throw new Error("An error occurred while fetching movies.");
       const data = await response.json();
+      console.log(data);
 
       if (data.results?.length === 0) {
         setErrorMessage("No movies found.");

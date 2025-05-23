@@ -27,6 +27,10 @@ const Footer = () => {
         Privacy Policy
       </button>
       <PrivacyPolicy isOpen={isPrivacyOpen} onClose={closePrivacyModal} />
+      <div className="mt-2 py-4 border-t text-center text-gray-600">
+        <p>Powered by <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">TMDB</a></p>
+        <p><b>DISCLAIMER:</b>This site is not a streaming platform; links are provided for informational purposes only</p>
+      </div>
     </footer>
   );
 };

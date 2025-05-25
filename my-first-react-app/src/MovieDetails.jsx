@@ -140,7 +140,7 @@ const MovieDetails = () => {
                   ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
                   : "No-movie.png"
               }
-              alt={movie.title}
+              alt={`${movie.title} poster`}
               className="w-full rounded-lg shadow-lg"
             />
           </div>
@@ -173,7 +173,7 @@ const MovieDetails = () => {
               >
                 Watch Now
               </a>
-              <p className="text-white mt-2">Hey, watch the trailer first—spoilers are cheaper than therapy!😄😄😄</p>
+              <p><span className="text-gray-400 text-sm italic">Hey, watch the trailer first—spoilers are cheaper than therapy!😄😄😄</span></p>
             </div>
             {trailer && (
               <div className="mb-4">
@@ -188,6 +188,24 @@ const MovieDetails = () => {
                 </div>
               </div>
             )}
+                        <div className="mt-4 flex gap-2">
+              <a
+                href={`https://twitter.com/intent/tweet?text=Check out ${encodeURIComponent(movie.title)} on My Movie Site!&url=${window.location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Share on X
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800"
+              >
+                Share on Facebook
+              </a>
+            </div>
           </div>
         </div>
 

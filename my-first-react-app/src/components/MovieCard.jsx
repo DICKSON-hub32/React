@@ -10,18 +10,18 @@ const MovieCard = ({
   const [showRatingInput, setShowRatingInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // useEffect(() => {
-  //   const checkFavorite = async () => {
-  //     try {
-  //       const favorites = await getUserFavorites();
-  //       setIsFavorite(favorites.some((fav) => fav.movieId === id));
-  //     } catch (error) {
-  //       console.error("Error checking favorites:", error);
-  //       setErrorMessage("Failed to load favorites. Please try again.");
-  //     }
-  //   };
-  //   checkFavorite();
-  // }, [id]);
+  useEffect(() => {
+    const checkFavorite = async () => {
+      try {
+        const favorites = await getUserFavorites();
+        setIsFavorite(favorites.some((fav) => fav.movieId === id));
+      } catch (error) {
+        console.error("Error checking favorites:", error);
+        setErrorMessage("Failed to load favorites. Please try again.");
+      }
+    };
+    checkFavorite();
+  }, [id]);
 
   const handleFavorite = async () => {
     setErrorMessage("");

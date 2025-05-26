@@ -17,7 +17,7 @@ const MovieCard = ({
         setIsFavorite(favorites.some((fav) => fav.movieId === id));
       } catch (error) {
         console.error("Error checking favorites:", error);
-        setErrorMessage("Failed to load favorites. Please try again.");
+        setErrorMessage("");
       }
     };
     checkFavorite();
